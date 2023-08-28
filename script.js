@@ -1,3 +1,21 @@
+window.addEventListener("DOMContentLoaded", () => {
+    const numbers = document.querySelectorAll(".number");
+
+    for (const number of numbers) {
+        number.addEventListener("click", click_number_btn);
+    }
+});
+
+function click_number_btn(event) {
+    const number = event.target.textContent;
+    push_number(number);
+}
+
+function push_number(number) {
+    const text = document.querySelector(".text");
+    text.textContent += number;
+}
+
 function add(num1, num2) {
     const number1 = parseInt(num1);
     const number2 = parseInt(num2);
