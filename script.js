@@ -1,3 +1,5 @@
+let global_display = "";
+
 window.addEventListener("DOMContentLoaded", () => {
     const numbers = document.querySelectorAll(".number");
 
@@ -12,8 +14,10 @@ function click_number_btn(event) {
 }
 
 function push_number(number) {
+    global_display += number;
+
     const text = document.querySelector(".text");
-    text.textContent += number;
+    text.textContent = global_display;
 }
 
 function add(num1, num2) {
