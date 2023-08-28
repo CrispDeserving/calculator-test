@@ -4,9 +4,56 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="./script.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: monospace;
+    }
+
+    button {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+  </style>
   <title>Calculator</title>
 </head>
 <body>
-  
+  <div class="main-container">
+    <div class="display">
+      <span class="text" style="font-size: 3rem;">3+4=7</span>
+    </div>
+
+    <div class="buttons">
+      <div class="row">
+        <button>+</button>
+        <button>-</button>
+        <button>AC</button>
+        <button>C</button>
+      </div>
+
+      <div class="row">
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button>/</button>
+      </div>
+
+      <div class="row">
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button>*</button>
+      </div>
+
+      <div class="row">
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>    
+        <button>=</button>    
+      </div>
+    </div>
+  </div>
 </body>
 </html>
