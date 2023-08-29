@@ -2,22 +2,39 @@ let global_display = "";
 
 window.addEventListener("DOMContentLoaded", () => {
     const numbers = document.querySelectorAll(".number");
-
     for (const number of numbers) {
-        number.addEventListener("click", click_number_btn);
+        number.addEventListener("click", click_number_btn_handler);
+    }
+    
+    const operators = document.querySelectorAll(".operator");
+    for (const operator of operators) {
+        operator.addEventListener("click", click_number_btn_handler);
     }
 });
 
-function click_number_btn(event) {
+function click_number_btn_handler(event) {
     const number = event.target.textContent;
     push_number(number);
 }
 
 function push_number(number) {
     global_display += number;
+    update_display(global_display);    
+}
 
-    const text = document.querySelector(".text");
-    text.textContent = global_display;
+function click_operator_btn_handler(event) {
+    const symbol = event.target.textContent;
+    push_operator(symbol);
+}
+
+function push_operator(symbol) {
+    global_display += number;
+    update_display(global_display);
+}
+
+function update_display(text) {
+    const text_element = document.querySelector(".text");
+    text_element.textContent = text;
 }
 
 function add(num1, num2) {
