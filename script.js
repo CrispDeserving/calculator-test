@@ -71,7 +71,7 @@ function update_display(text = global_display) {
 }
 
 function click_equal_btn_handler() {
-    if (calculator_state === calculator_states.SYMBOL) {
+    if (calculator_state === calculator_states.SYMBOL || global_display === "") {
         return;
     }
 
@@ -103,6 +103,9 @@ function click_equal_btn_handler() {
         result = operate(curr_operator, result, second_arg);
     }
     result = Number(result).toFixed(2);
+    if (result.toString().endsWith("00")) {
+        result = Math.floor(result);
+    }
 
     update_display(`${global_display} = ${result}`);
     global_display = result;
@@ -131,7 +134,7 @@ function click_backspace_btn_handler() {
     if (do_double_backspace) {
         display = backspace(display);
     }
-    
+
     global_display = display;
     update_display(global_display);
 }
