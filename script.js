@@ -44,7 +44,10 @@ function click_operator_btn_handler(event) {
 }
 
 function push_operator(symbol) {
-    global_display += symbol;
+    if (calculator_state !== calculator_states.NUMBER) {
+        return;
+    }
+    global_display += ` ${symbol}`;
 
     calculator_state = calculator_states.SYMBOL;
     update_display(global_display);
