@@ -65,9 +65,9 @@ function push_operator(symbol) {
     update_display(global_display);
 }
 
-function update_display(text = global_display) {
+function update_display(string = global_display) {
     const text_element = document.querySelector(".text");
-    text_element.textContent = text;
+    text_element.textContent = string === "" ? "..." : string;
 }
 
 function click_equal_btn_handler() {
