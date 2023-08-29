@@ -16,6 +16,9 @@ window.addEventListener("DOMContentLoaded", () => {
     for (const operator of operators) {
         operator.addEventListener("click", click_operator_btn_handler);
     }
+
+    const equal_btn = document.querySelector('.equals');
+    equal_btn.addEventListener("click", click_equal_btn_handler);
 });
 
 function click_number_btn_handler(event) {
@@ -56,6 +59,33 @@ function push_operator(symbol) {
 function update_display(text) {
     const text_element = document.querySelector(".text");
     text_element.textContent = text;
+}
+
+function click_equal_btn_handler() {
+    if (calculator_state === calculator_states.SYMBOL) {
+        return;
+    }
+
+    const operators = [
+        "+",
+        "-",
+        "*", 
+        "/",
+    ];
+
+    const display = global_display;
+    let expr_arr = operators.reduce((acc, operator) => {
+        return acc.map((element) => {
+            const separated = element.split(operator);
+            const last_e = separated.pop();
+
+            const sandwich = separated.map(e => [e, operator]);
+            sandwich.push(last_e);
+
+            return sandwich.flat();
+        }).flat();
+    }, [display]).map(e => e.trim());
+    console.log(expr_arr);
 }
 
 function add(num1, num2) {
