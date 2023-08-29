@@ -19,6 +19,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const equal_btn = document.querySelector('.equals');
     equal_btn.addEventListener("click", click_equal_btn_handler);
+
+    const all_clear = document.querySelector(".all-clear");
+    all_clear.addEventListener("click", () => {
+        global_display = "";
+        update_display(global_display);
+    });
 });
 
 function click_number_btn_handler(event) {
@@ -56,7 +62,7 @@ function push_operator(symbol) {
     update_display(global_display);
 }
 
-function update_display(text) {
+function update_display(text = global_display) {
     const text_element = document.querySelector(".text");
     text_element.textContent = text;
 }
@@ -93,6 +99,7 @@ function click_equal_btn_handler() {
 
         result = operate(curr_operator, result, second_arg);
     }
+    result = Number(result).toFixed(2);
 
     update_display(`${global_display} = ${result}`);
     global_display = result;
