@@ -1,4 +1,10 @@
+const calculator_states = Object.freeze({
+    NUMBER: Symbol("number"),
+    SYMBOL: Symbol("symbol"),
+});
+
 let global_display = "";
+let calculator_state = calculator_states.NUMBER;
 
 window.addEventListener("DOMContentLoaded", () => {
     const numbers = document.querySelectorAll(".number");
@@ -8,7 +14,7 @@ window.addEventListener("DOMContentLoaded", () => {
     
     const operators = document.querySelectorAll(".operator");
     for (const operator of operators) {
-        operator.addEventListener("click", click_number_btn_handler);
+        operator.addEventListener("click", click_operator_btn_handler);
     }
 });
 
@@ -18,8 +24,18 @@ function click_number_btn_handler(event) {
 }
 
 function push_number(number) {
-    global_display += number;
-    update_display(global_display);    
+    switch (calculator_state) {
+        case calculator_states.NUMBER:
+            global_display += number;
+            break;
+            
+        case calculator_states.SYMBOL:
+            global_display += ` ${number}`;
+            break;
+    }
+
+    calculator_state = calculator_states.NUMBER;
+    update_display(global_display);        
 }
 
 function click_operator_btn_handler(event) {
@@ -28,7 +44,9 @@ function click_operator_btn_handler(event) {
 }
 
 function push_operator(symbol) {
-    global_display += number;
+    global_display += symbol;
+
+    calculator_state = calculator_states.SYMBOL;
     update_display(global_display);
 }
 
