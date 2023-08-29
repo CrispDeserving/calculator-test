@@ -66,6 +66,7 @@ function click_equal_btn_handler() {
         return;
     }
 
+    const expression_text = global_display;
     const operators = [
         "+",
         "-",
@@ -73,7 +74,6 @@ function click_equal_btn_handler() {
         "/",
     ];
 
-    const display = global_display;
     let expr_arr = operators.reduce((acc, operator) => {
         return acc.map((element) => {
             const separated = element.split(operator);
@@ -84,8 +84,19 @@ function click_equal_btn_handler() {
 
             return sandwich.flat();
         }).flat();
-    }, [display]).map(e => e.trim());
-    console.log(expr_arr);
+    }, [expression_text]).map(e => e.trim());
+    
+    let result = expr_arr[0];
+    for (let i=2; i<expr_arr.length; i+=2) {
+        const curr_operator = expr_arr[i-1];
+        const second_arg = expr_arr[i];
+
+        result = operate(curr_operator, result, second_arg);
+        console.log({curr_operator, result, second_arg});
+    }
+
+    update_display(`${global_display} = ${result}`);
+    global_display = result;
 }
 
 function add(num1, num2) {
