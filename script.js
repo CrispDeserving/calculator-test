@@ -102,8 +102,8 @@ function click_equal_btn_handler() {
 
         result = operate(curr_operator, result, second_arg);
     }
-    result = Number(result).toFixed(2);
-    if (result.toString().endsWith("00")) {
+    result = Number(result).toPrecision(8);
+    if (result - Math.floor(result) < Number.EPSILON) {
         result = Math.floor(result);
     }
 
