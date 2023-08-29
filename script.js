@@ -92,7 +92,6 @@ function click_equal_btn_handler() {
         const second_arg = expr_arr[i];
 
         result = operate(curr_operator, result, second_arg);
-        console.log({curr_operator, result, second_arg});
     }
 
     update_display(`${global_display} = ${result}`);
@@ -100,29 +99,29 @@ function click_equal_btn_handler() {
 }
 
 function add(num1, num2) {
-    const number1 = parseInt(num1);
-    const number2 = parseInt(num2);
+    const number1 = parseFloat(num1);
+    const number2 = parseFloat(num2);
 
     return number1 + number2;
 }
 
 function subtract(num1, num2) {
-    const number1 = parseInt(num1);
-    const number2 = parseInt(num2);
+    const number1 = parseFloat(num1);
+    const number2 = parseFloat(num2);
     
     return number1 - number2;
 }
 
 function multiply(num1, num2) {
-    const number1 = parseInt(num1);
-    const number2 = parseInt(num2);
+    const number1 = parseFloat(num1);
+    const number2 = parseFloat(num2);
     
     return number1 * number2;
 }
 
 function divide(num1, num2) {
-    const number1 = parseInt(num1);
-    const number2 = parseInt(num2);
+    const number1 = parseFloat(num1);
+    const number2 = parseFloat(num2);
     
     return number1 / number2;
 }
