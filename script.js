@@ -25,6 +25,9 @@ window.addEventListener("DOMContentLoaded", () => {
         global_display = "";
         update_display(global_display);
     });
+
+    const backspace = document.querySelector(".backspace");
+    backspace.addEventListener("click", click_backspace_btn_handler);
 });
 
 function click_number_btn_handler(event) {
@@ -103,6 +106,38 @@ function click_equal_btn_handler() {
 
     update_display(`${global_display} = ${result}`);
     global_display = result;
+}
+
+function click_backspace_btn_handler() {
+    display = global_display;
+    let do_double_backspace = true;
+
+    switch (calculator_state) {
+        case calculator_states.SYMBOL:
+            calculator_state = calculator_states.NUMBER;
+            break;
+            
+        case calculator_states.NUMBER:
+            const second_back = display[display.length-2];
+            if (second_back < "0" || second_back > "9") {
+                calculator_state = calculator_states.SYMBOL;
+            } else {
+                do_double_backspace = false;
+            }
+            break;
+    }
+
+    display = backspace(display);
+    if (do_double_backspace) {
+        display = backspace(display);
+    }
+    
+    global_display = display;
+    update_display(global_display);
+}
+
+function backspace(string) {
+    return string.substring(0, string.length-1);
 }
 
 function add(num1, num2) {
