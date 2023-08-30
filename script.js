@@ -1,10 +1,12 @@
 const calculator_states = Object.freeze({
-    NUMBER: Symbol("number"),
+    NUMBER: Object.freeze({
+        NO_DECIMAL: Symbol("no_decimal"),
+        WITH_DECIMAL: Symbol("with_decimal"),
+    }),
     SYMBOL: Symbol("symbol"),
 });
-
 let global_display = "";
-let calculator_state = calculator_states.NUMBER;
+let calculator_state = calculator_states.NUMBER.NO_DECIMAL;
 
 window.addEventListener("DOMContentLoaded", () => {
     const numbers = document.querySelectorAll(".number");
@@ -22,12 +24,16 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const all_clear = document.querySelector(".all-clear");
     all_clear.addEventListener("click", () => {
+        calculator_state = calculator_states.NUMBER.NO_DECIMAL;
         global_display = "";
         update_display(global_display);
     });
 
     const backspace = document.querySelector(".backspace");
     backspace.addEventListener("click", click_backspace_btn_handler);
+
+    const dot = document.querySelector(".dot");
+    dot.addEventListener("click", click_dot_btn_handler);
 });
 
 function click_number_btn_handler(event) {
@@ -37,16 +43,17 @@ function click_number_btn_handler(event) {
 
 function push_number(number) {
     switch (calculator_state) {
-        case calculator_states.NUMBER:
+        case calculator_states.NUMBER.WITH_DECIMAL:
+        case calculator_states.NUMBER.NO_DECIMAL:
             global_display += number;
             break;
             
         case calculator_states.SYMBOL:
             global_display += ` ${number}`;
+            calculator_state = calculator_states.NUMBER.NO_DECIMAL;
             break;
     }
 
-    calculator_state = calculator_states.NUMBER;
     update_display(global_display);        
 }
 
@@ -56,12 +63,36 @@ function click_operator_btn_handler(event) {
 }
 
 function push_operator(symbol) {
-    if (calculator_state !== calculator_states.NUMBER) {
+    if (calculator_state !== calculator_states.NUMBER.WITH_DECIMAL && calculator_state !== calculator_states.NUMBER.NO_DECIMAL) {
         return;
     }
     global_display += ` ${symbol}`;
 
     calculator_state = calculator_states.SYMBOL;
+    update_display(global_display);
+}
+
+function click_dot_btn_handler() {
+    const display = global_display;
+    switch (calculator_state) {
+        case calculator_states.NUMBER.WITH_DECIMAL:
+            return;
+        
+        case calculator_states.NUMBER.NO_DECIMAL:
+            const last_char = display[display.length-1];
+
+            if (last_char < "0" || last_char > "9") {
+                global_display += " 0";
+            }
+            break;
+            
+        case calculator_states.SYMBOL:
+            global_display += " 0";
+            break;
+    }
+
+    calculator_state = calculator_states.NUMBER.WITH_DECIMAL;
+    global_display += ".";
     update_display(global_display);
 }
 
