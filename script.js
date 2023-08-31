@@ -39,6 +39,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const dot = document.querySelector(".dot");
     dot.addEventListener("click", click_dot_btn_handler);
+
+    const nothing_btn = document.querySelector(".nothing");
+    nothing_btn.addEventListener("click", () => alert("Beep boop."));
 });
 
 function click_number_btn_handler(event) {
