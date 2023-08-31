@@ -210,8 +210,13 @@ function click_equal_btn_handler() {
     if (result.toString().includes(".")) {
         result = trim_zeroes(result);
     }
+
+    if (result.toString() === "NaN") {
+        alert("Dividing by zero. Beep boop. Answer displayed is not real.");
+        result = "0";
+    }
     update_display(`${global_display} = ${result}`);
-    global_display = result;
+    global_display = result.toString();
 }
 
 function click_backspace_btn_handler() {
@@ -281,6 +286,9 @@ function divide(num1, num2) {
     const number1 = parseFloat(num1);
     const number2 = parseFloat(num2);
     
+    if (number2 === 0) {
+        return NaN;
+    }
     return number1 / number2;
 }
 
