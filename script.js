@@ -96,6 +96,10 @@ function push_operator(symbol) {
         case calculator_states.NUMBER.WITH_DECIMAL:
             global_display = trim_zeroes(global_display);
         case calculator_states.NUMBER.NO_DECIMAL:
+            if (global_display === "") {
+                return;
+            }
+
             const dot_list = global_display.split(".");
             const last_on_dot = dot_list.pop();
         
