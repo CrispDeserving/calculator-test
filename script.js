@@ -5,6 +5,8 @@ const calculator_states = Object.freeze({
     }),
     SYMBOL: Symbol("symbol"),
 });
+const MAX_EXPR_LEN = 14;
+
 let global_display = "";
 let calculator_state = calculator_states.NUMBER.NO_DECIMAL;
 
@@ -45,9 +47,13 @@ function click_number_btn_handler(event) {
 }
 
 function push_number(number) {
+    if (global_display.length >= MAX_EXPR_LEN) {
+        return;
+    }
+    
     switch (calculator_state) {
         case calculator_states.NUMBER.WITH_DECIMAL:
-        case calculator_states.NUMBER.NO_DECIMAL:
+            case calculator_states.NUMBER.NO_DECIMAL:
             global_display += number;
         break;
             
@@ -79,6 +85,10 @@ function click_operator_btn_handler(event) {
 }
 
 function push_operator(symbol) {
+    if (global_display.length >= MAX_EXPR_LEN) {
+        return;
+    }
+
     switch (calculator_state) {
         default:
             return;
@@ -114,6 +124,10 @@ function trim_zeroes(string) {
 }
 
 function click_dot_btn_handler() {
+    if (global_display.length >= MAX_EXPR_LEN) {
+        return;
+    }
+    
     const display = global_display;
     switch (calculator_state) {
         case calculator_states.NUMBER.WITH_DECIMAL:
@@ -183,13 +197,13 @@ function click_equal_btn_handler() {
 
         result = operate(curr_operator, result, second_arg);
     }
-    
+
     result = Number(result).toPrecision(8);
     if (result - Math.floor(result) < Number.EPSILON) {
         result = Math.floor(result);
     }
 
-    if (result.includes(".")) {
+    if (result.toString().includes(".")) {
         result = trim_zeroes(result);
     }
     update_display(`${global_display} = ${result}`);
