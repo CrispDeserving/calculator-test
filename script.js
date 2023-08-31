@@ -13,6 +13,9 @@ window.addEventListener("DOMContentLoaded", () => {
     for (const number of numbers) {
         number.addEventListener("click", click_number_btn_handler);
     }
+
+    const zero = document.querySelector(".zero");
+    zero.addEventListener("click", click_zero_btn_handler);
     
     const operators = document.querySelectorAll(".operator");
     for (const operator of operators) {
@@ -57,24 +60,57 @@ function push_number(number) {
     update_display(global_display);        
 }
 
+function click_zero_btn_handler() {
+    if (calculator_state === calculator_states.NUMBER.NO_DECIMAL) {
+        const dot_list = global_display.split(" ");
+        const last_on_dot = dot_list.pop();
+        
+        if (last_on_dot !== "" && Number(last_on_dot) === 0) {
+            return;
+        }
+    }
+
+    push_number("0");
+}
+
 function click_operator_btn_handler(event) {
     const symbol = event.target.textContent;
     push_operator(symbol);
 }
 
 function push_operator(symbol) {
-    if (calculator_state !== calculator_states.NUMBER.WITH_DECIMAL && calculator_state !== calculator_states.NUMBER.NO_DECIMAL) {
-        return;
-    }
-    
-    if (global_display.endsWith(".")) {
-        global_display = global_display.substring(0, global_display.length - 1);
-    }
+    switch (calculator_state) {
+        default:
+            return;
+        
+        case calculator_states.NUMBER.WITH_DECIMAL:
+            global_display = trim_zeroes(global_display);
+        case calculator_states.NUMBER.NO_DECIMAL:
+            const dot_list = global_display.split(".");
+            const last_on_dot = dot_list.pop();
+        
+            if (last_on_dot === "") {
+                global_display = dot_list.join(".");
+            }
+        break;
 
+    }
     global_display += ` ${symbol}`;
     
     calculator_state = calculator_states.SYMBOL;
     update_display(global_display);
+}
+
+function trim_zeroes(string) {
+    let result = string;
+
+    if (result.endsWith("0")) {
+        while (result.endsWith("0")) {
+            result = result.substring(0, result.length - 1);
+        }
+    }
+
+    return result;
 }
 
 function click_dot_btn_handler() {
@@ -86,7 +122,9 @@ function click_dot_btn_handler() {
         case calculator_states.NUMBER.NO_DECIMAL:
             const last_char = display[display.length-1];
 
-            if (last_char < "0" || last_char > "9") {
+            if (last_char === undefined) {
+                global_display = "0";
+            } else if (last_char < "0" || last_char > "9") {
                 global_display += " 0";
             }
         break;
@@ -109,6 +147,13 @@ function update_display(string = global_display) {
 function click_equal_btn_handler() {
     if (calculator_state === calculator_states.SYMBOL || global_display === "") {
         return;
+    }
+
+    const dot_list = global_display.split(".");
+    const last_on_dot = dot_list.pop();
+
+    if (last_on_dot === "" || Number(last_on_dot) === 0) {
+        global_display = dot_list.join(".");
     }
 
     const expression_text = global_display;
@@ -138,11 +183,15 @@ function click_equal_btn_handler() {
 
         result = operate(curr_operator, result, second_arg);
     }
+    
     result = Number(result).toPrecision(8);
     if (result - Math.floor(result) < Number.EPSILON) {
         result = Math.floor(result);
     }
 
+    if (result.includes(".")) {
+        result = trim_zeroes(result);
+    }
     update_display(`${global_display} = ${result}`);
     global_display = result;
 }
