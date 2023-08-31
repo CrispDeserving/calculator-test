@@ -46,12 +46,12 @@ function push_number(number) {
         case calculator_states.NUMBER.WITH_DECIMAL:
         case calculator_states.NUMBER.NO_DECIMAL:
             global_display += number;
-            break;
+        break;
             
         case calculator_states.SYMBOL:
             global_display += ` ${number}`;
             calculator_state = calculator_states.NUMBER.NO_DECIMAL;
-            break;
+        break;
     }
 
     update_display(global_display);        
@@ -66,8 +66,13 @@ function push_operator(symbol) {
     if (calculator_state !== calculator_states.NUMBER.WITH_DECIMAL && calculator_state !== calculator_states.NUMBER.NO_DECIMAL) {
         return;
     }
-    global_display += ` ${symbol}`;
+    
+    if (global_display.endsWith(".")) {
+        global_display = global_display.substring(0, global_display.length - 1);
+    }
 
+    global_display += ` ${symbol}`;
+    
     calculator_state = calculator_states.SYMBOL;
     update_display(global_display);
 }
@@ -84,11 +89,11 @@ function click_dot_btn_handler() {
             if (last_char < "0" || last_char > "9") {
                 global_display += " 0";
             }
-            break;
+        break;
             
         case calculator_states.SYMBOL:
             global_display += " 0";
-            break;
+        break;
     }
 
     calculator_state = calculator_states.NUMBER.WITH_DECIMAL;
@@ -148,17 +153,27 @@ function click_backspace_btn_handler() {
 
     switch (calculator_state) {
         case calculator_states.SYMBOL:
-            calculator_state = calculator_states.NUMBER;
-            break;
+            const sandwich = display.split(" ");
+            const last_number = sandwich[sandwich.length - 2];
+
+            if (last_number.includes(".")) {
+                calculator_state = calculator_states.NUMBER.WITH_DECIMAL;
+            } else {
+                calculator_state = calculator_states.NUMBER.NO_DECIMAL;
+            }
+        break;
             
-        case calculator_states.NUMBER:
+        case calculator_states.NUMBER.WITH_DECIMAL:
+        case calculator_states.NUMBER.NO_DECIMAL:
             const second_back = display[display.length-2];
-            if (second_back < "0" || second_back > "9") {
+            if (second_back === ".") {
+                calculator_state = calculator_states.NUMBER.NO_DECIMAL;
+            } else if (second_back < "0" || second_back > "9") {
                 calculator_state = calculator_states.SYMBOL;
             } else {
                 do_double_backspace = false;
             }
-            break;
+        break;
     }
 
     display = backspace(display);
